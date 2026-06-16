@@ -1,0 +1,21 @@
+#!/bin/sh
+# Runs Spotless before every commit to enforce consistent formatting.
+# The check goal is used so that formatting issues are reported to
+# the developer rather than being fixed automatically. The developer
+# is expected to run the formatter themselves, review the changes, add
+# them to the commit, and then retry.
+
+
+echo "Checking Spotless formatting..."
+
+# use check goal rather than apply
+mvn spotless:check --no-transfer-progress -q
+
+if [ $? -ne 0 ]; then
+  echo "Spotless found formatting issues. Please run 'mvn spotless:apply'"
+  echo "to fix the problems, inspect the changes, add them to the commit,"
+  echo "and then try committing again."
+  exit 1
+fi
+
+echo "Spotless OK."
